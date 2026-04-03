@@ -76,6 +76,14 @@ export async function GET() {
   const apiKey = process.env.AIRTABLE_API_KEY;
   const baseId = process.env.AIRTABLE_BASE_ID;
 
+  console.log(
+    "[listings] env:",
+    "apiKey first 5:",
+    apiKey ? apiKey.slice(0, 5) : "(none)",
+    "baseId:",
+    baseId ?? "(none)",
+  );
+
   if (!apiKey || !baseId) {
     return NextResponse.json(
       { error: "Missing AIRTABLE_API_KEY or AIRTABLE_BASE_ID in environment." },
