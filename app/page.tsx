@@ -15,6 +15,36 @@ function formatPrice(price: Listing["price"]): string {
   return price;
 }
 
+function groupListingsByCategory(listings: Listing[]): {
+  category: string;
+  items: Listing[];
+}[] {
+  const map = new Map<string, Listing[]>();
+
+  for (const listing of listings) {
+    const key = listing.category ?? "Other";
+    if (!map.has(key)) map.set(key, []);
+    map.get(key)!.push(listing);
+  }
+
+  const categories = [...map.keys()].sort((a, b) =>
+    a.localeCompare(b, undefined, { sensitivity: "base" }),
+  );
+
+  return categories.map((category) => ({
+    category,
+    items: map.get(category)!,
+  }));
+}
+
+function collectionHeaderForGroup(items: Listing[]) {
+  const headline =
+    items.find((l) => l.collectionHeadline)?.collectionHeadline ?? null;
+  const tagline =
+    items.find((l) => l.collectionTagline)?.collectionTagline ?? null;
+  return { headline, tagline };
+}
+
 async function getListings(): Promise<{
   listings: Listing[];
   error: string | null;
@@ -80,125 +110,114 @@ export default async function Home() {
           </p>
         ) : null}
 
-        {(() => {
-          const groups = listings.reduce(
-            (acc, listing) => {
-              const key = listing.category ?? "Other";
-              if (!acc[key]) acc[key] = [];
-              acc[key].push(listing);
-              return acc;
-            },
-            {} as Record<string, typeof listings>,
-          );
+        {groupListingsByCategory(listings).map(({ category, items }) => {
+          const { headline, tagline } = collectionHeaderForGroup(items);
 
-          return Object.entries(groups).map(([category, items]) => {
-            const first = items[0];
-            const headline = first.collectionHeadline;
-            const tagline = first.collectionTagline;
-
-            return (
-              <section key={category} className="mb-16">
-                {headline ? (
-                  <div className="mb-10 max-w-2xl">
-                    <h2 className="font-sans text-3xl font-medium tracking-tight text-stone-900 mb-3">
+          return (
+            <section key={category} className="mb-16 last:mb-0">
+              {headline || tagline ? (
+                <div className="mb-10 max-w-2xl">
+                  {headline ? (
+                    <h2 className="mb-3 font-sans text-3xl font-medium tracking-tight text-stone-900">
                       {headline}
                     </h2>
-                    {tagline ? (
-                      <p className="font-sans text-base leading-relaxed text-stone-500">
-                        {tagline}
-                      </p>
-                    ) : null}
-                  </div>
-                ) : null}
-                <ul className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-12">
-                  {items.map((listing) => {
-                    const href = listing.listingUrl ?? "#";
-                    const note = listing.aiCuratorNote;
+                  ) : null}
+                  {tagline ? (
+                    <p className="font-sans text-base leading-relaxed text-stone-500">
+                      {tagline}
+                    </p>
+                  ) : null}
+                </div>
+              ) : null}
 
-                    return (
-                      <li key={listing.id} className="list-none">
-                        <a
-                          href={href}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="group block h-full outline-none focus-visible:ring-2 focus-visible:ring-stone-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f3f0e8]"
-                        >
-                          <article className="flex h-full flex-col overflow-hidden rounded-sm border border-stone-200/90 bg-[#faf8f4] shadow-[0_1px_0_rgba(28,25,23,0.06)] transition-[box-shadow,transform] duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_12px_40px_-20px_rgba(28,25,23,0.25)]">
-                            <div className="relative aspect-[3/4] w-full overflow-hidden bg-stone-200">
-                              {listing.staffPick ? (
-                                <div className="absolute top-3 left-3 z-10 flex flex-col gap-1">
-                                  <span className="bg-stone-900 text-stone-100 px-2 py-1 font-sans text-[10px] font-medium tracking-[0.14em] uppercase">
-                                    ★ {`${listing.staffPickName ?? "Staff"}'s Pick`}
-                                  </span>
-                                  {listing.staffPickNote ? (
-                                    <span className="bg-stone-900/80 text-stone-100 px-2 py-1 font-sans text-[10px] leading-relaxed max-w-[180px]">
-                                      {listing.staffPickNote}
-                                    </span>
-                                  ) : null}
-                                </div>
-                              ) : null}
-                              {listing.imageUrl ? (
-                                // eslint-disable-next-line @next/next/no-img-element
-                                <img
-                                  src={listing.imageUrl}
-                                  alt=""
-                                  className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
-                                />
-                              ) : (
-                                <div className="flex h-full w-full items-center justify-center font-sans text-xs tracking-wide text-stone-400 uppercase">
-                                  No image
-                                </div>
-                              )}
-                              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-stone-900/25 via-transparent to-transparent opacity-60" />
-                            </div>
+              <ul className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-12">
+                {items.map((listing) => {
+                  const href = listing.listingUrl ?? "#";
+                  const note = listing.aiCuratorNote;
 
-                            <div className="flex flex-1 flex-col gap-4 p-5 md:p-6">
-                              <div className="flex flex-wrap items-center gap-2">
-                                {listing.era ? (
-                                  <span className="rounded-sm border border-stone-300/80 bg-stone-100/80 px-2 py-0.5 font-sans text-[10px] font-medium tracking-[0.14em] text-stone-600 uppercase">
-                                    {listing.era}
-                                  </span>
-                                ) : null}
-                                {listing.source ? (
-                                  <span className="rounded-sm border border-stone-200 bg-white/80 px-2 py-0.5 font-sans text-[10px] tracking-[0.12em] text-stone-500 uppercase">
-                                    {listing.source}
+                  return (
+                    <li key={listing.id} className="list-none">
+                      <a
+                        href={href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group block h-full outline-none focus-visible:ring-2 focus-visible:ring-stone-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f3f0e8]"
+                      >
+                        <article className="flex h-full flex-col overflow-hidden rounded-sm border border-stone-200/90 bg-[#faf8f4] shadow-[0_1px_0_rgba(28,25,23,0.06)] transition-[box-shadow,transform] duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_12px_40px_-20px_rgba(28,25,23,0.25)]">
+                          <div className="relative aspect-[3/4] w-full overflow-hidden bg-stone-200">
+                            {listing.staffPick ? (
+                              <div className="absolute top-3 left-3 z-10 flex flex-col gap-1">
+                                <span className="bg-stone-900 px-2 py-1 font-sans text-[10px] font-medium tracking-[0.14em] text-stone-100 uppercase">
+                                  ★ {`${listing.staffPickName ?? "Staff"}'s Pick`}
+                                </span>
+                                {listing.staffPickNote ? (
+                                  <span className="max-w-[180px] bg-stone-900/80 px-2 py-1 font-sans text-[10px] leading-relaxed text-stone-100">
+                                    {listing.staffPickNote}
                                   </span>
                                 ) : null}
                               </div>
-
-                              <div className="flex flex-col gap-1">
-                                <h2 className="font-sans text-lg font-medium leading-snug tracking-tight text-stone-900 decoration-stone-400/0 underline-offset-4 transition-colors group-hover:decoration-stone-500/80 group-hover:underline">
-                                  {listing.title ?? "Untitled"}
-                                </h2>
-                                <p className="font-sans text-sm text-stone-600">
-                                  <span className="font-medium text-stone-800">
-                                    {formatPrice(listing.price)}
-                                  </span>
-                                  {listing.size ? (
-                                    <span className="text-stone-400">
-                                      {" "}
-                                      · Size {listing.size}
-                                    </span>
-                                  ) : null}
-                                </p>
+                            ) : null}
+                            {listing.imageUrl ? (
+                              // eslint-disable-next-line @next/next/no-img-element
+                              <img
+                                src={listing.imageUrl}
+                                alt=""
+                                className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+                              />
+                            ) : (
+                              <div className="flex h-full w-full items-center justify-center font-sans text-xs tracking-wide text-stone-400 uppercase">
+                                No image
                               </div>
+                            )}
+                            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-stone-900/25 via-transparent to-transparent opacity-60" />
+                          </div>
 
-                              {note ? (
-                                <blockquote className="mt-auto border-l-2 border-stone-300/90 pl-4 [font-family:var(--font-editorial)] text-base leading-relaxed font-medium italic text-stone-600">
-                                  {note}
-                                </blockquote>
+                          <div className="flex flex-1 flex-col gap-4 p-5 md:p-6">
+                            <div className="flex flex-wrap items-center gap-2">
+                              {listing.era ? (
+                                <span className="rounded-sm border border-stone-300/80 bg-stone-100/80 px-2 py-0.5 font-sans text-[10px] font-medium tracking-[0.14em] text-stone-600 uppercase">
+                                  {listing.era}
+                                </span>
+                              ) : null}
+                              {listing.source ? (
+                                <span className="rounded-sm border border-stone-200 bg-white/80 px-2 py-0.5 font-sans text-[10px] tracking-[0.12em] text-stone-500 uppercase">
+                                  {listing.source}
+                                </span>
                               ) : null}
                             </div>
-                          </article>
-                        </a>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </section>
-            );
-          });
-        })()}
+
+                            <div className="flex flex-col gap-1">
+                              <h2 className="font-sans text-lg font-medium leading-snug tracking-tight text-stone-900 decoration-stone-400/0 underline-offset-4 transition-colors group-hover:decoration-stone-500/80 group-hover:underline">
+                                {listing.title ?? "Untitled"}
+                              </h2>
+                              <p className="font-sans text-sm text-stone-600">
+                                <span className="font-medium text-stone-800">
+                                  {formatPrice(listing.price)}
+                                </span>
+                                {listing.size ? (
+                                  <span className="text-stone-400">
+                                    {" "}
+                                    · Size {listing.size}
+                                  </span>
+                                ) : null}
+                              </p>
+                            </div>
+
+                            {note ? (
+                              <blockquote className="mt-auto border-l-2 border-stone-300/90 pl-4 [font-family:var(--font-editorial)] text-base leading-relaxed font-medium italic text-stone-600">
+                                {note}
+                              </blockquote>
+                            ) : null}
+                          </div>
+                        </article>
+                      </a>
+                    </li>
+                  );
+                })}
+              </ul>
+            </section>
+          );
+        })}
       </main>
     </div>
   );
