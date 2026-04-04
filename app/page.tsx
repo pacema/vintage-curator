@@ -122,7 +122,7 @@ export default async function Home() {
               {headline || tagline ? (
                 <div className="mb-10 max-w-2xl">
                   {headline ? (
-                    <h2 className="mb-3 font-sans text-3xl font-medium tracking-tight text-stone-900">
+                    <h2 className="mb-3 font-sans text-[2.8125rem] font-medium leading-tight tracking-tight text-stone-900">
                       {headline}
                     </h2>
                   ) : null}
