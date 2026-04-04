@@ -12,4 +12,7 @@ export type Listing = {
   aiCuratorNote: string | null;
   aiStyleTags: string[];
   featured: boolean;
+  staffPick: boolean;
+  staffPickName: string | null;
+  staffPickNote: string | null;
 };
