@@ -69,9 +69,11 @@ function mapRecord(record: {
     aiCuratorNote: toStr(f.ai_curator_note),
     aiStyleTags: toStringArray(f.ai_style_tags),
     featured: toBool(f.featured),
+    staffPick: toBool(f.staff_pick),
+    staffPickName: toStr(f.staff_pick_name),
+    staffPickNote: toStr(f.staff_pick_note),
   };
 }
-
 export async function GET() {
   const apiKey = process.env.AIRTABLE_API_KEY;
   const baseId = process.env.AIRTABLE_BASE_ID;
