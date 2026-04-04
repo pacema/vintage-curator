@@ -208,10 +208,16 @@ export default async function Home() {
                             </div>
 
                             {note ? (
-                              <blockquote className="mt-auto border-l-2 border-stone-300/90 pl-4 [font-family:var(--font-editorial)] text-base leading-relaxed font-medium italic text-stone-600">
+                              <blockquote className="border-l-2 border-stone-300/90 pl-4 [font-family:var(--font-editorial)] text-base leading-relaxed font-medium italic text-stone-600">
                                 {note}
                               </blockquote>
                             ) : null}
+
+                            <div className="mt-auto border-t border-stone-200/80 pt-4">
+                              <span className="flex w-full items-center justify-center rounded-sm border border-stone-800 bg-stone-900 py-2.5 font-sans text-[11px] font-medium tracking-[0.14em] text-stone-100 uppercase transition-colors group-hover:bg-stone-800">
+                                Visit Website
+                              </span>
+                            </div>
                           </div>
                         </article>
                       </a>
