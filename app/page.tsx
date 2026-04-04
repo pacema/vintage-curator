@@ -1,5 +1,6 @@
 import { headers } from "next/headers";
 import type { Listing } from "@/lib/listing";
+import { Logo } from "./components/Logo";
 
 type ApiOk = { listings: Listing[] };
 type ApiErr = { error: string; detail?: string };
@@ -83,10 +84,13 @@ export default async function Home() {
   return (
     <div className="min-h-full flex flex-col bg-[#f3f0e8] text-stone-900">
       <header className="shrink-0 border-b border-stone-800 bg-[#141312] px-5 py-5 md:px-10 md:py-6">
-        <div className="mx-auto flex max-w-7xl flex-col gap-1 md:flex-row md:items-end md:justify-between md:gap-6">
-          <h1 className="font-sans text-lg font-medium tracking-[0.2em] text-stone-100 uppercase">
-            VintageCurator
-          </h1>
+        <div className="mx-auto flex max-w-7xl flex-col gap-4 md:flex-row md:items-end md:justify-between md:gap-6">
+          <div className="flex items-center gap-3 md:gap-4">
+            <Logo className="h-9 w-9 shrink-0 text-stone-100 md:h-10 md:w-10" />
+            <h1 className="font-sans text-lg font-medium tracking-[0.2em] text-stone-100 uppercase">
+              VintageCurator
+            </h1>
+          </div>
           <p className="max-w-md font-sans text-sm leading-relaxed text-stone-500 md:text-right">
             AI-curated vintage, sourced from the best
           </p>
