@@ -95,6 +95,18 @@ export default async function Home() {
                 >
                   <article className="flex h-full flex-col overflow-hidden rounded-sm border border-stone-200/90 bg-[#faf8f4] shadow-[0_1px_0_rgba(28,25,23,0.06)] transition-[box-shadow,transform] duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_12px_40px_-20px_rgba(28,25,23,0.25)]">
                     <div className="relative aspect-[3/4] w-full overflow-hidden bg-stone-200">
+                      {listing.staffPick ? (
+                        <div className="absolute top-3 left-3 z-10 flex flex-col gap-1">
+                          <span className="bg-stone-900 text-stone-100 px-2 py-1 font-sans text-[10px] font-medium tracking-[0.14em] uppercase">
+                            ★ {listing.staffPickName ?? "Staff"}'s Pick
+                          </span>
+                          {listing.staffPickNote ? (
+                            <span className="bg-stone-900/80 text-stone-100 px-2 py-1 font-sans text-[10px] leading-relaxed max-w-[180px]">
+                              {listing.staffPickNote}
+                            </span>
+                          ) : null}
+                        </div>
+                      ) : null}
                       {listing.imageUrl ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img
