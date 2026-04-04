@@ -72,6 +72,8 @@ function mapRecord(record: {
     staffPick: toBool(f.staff_pick),
     staffPickName: toStr(f.staff_pick_name),
     staffPickNote: toStr(f.staff_pick_note),
+    collectionHeadline: toStr(f.collection_headline),
+    collectionTagline: toStr(f.collection_tagline),
   };
 }
 export async function GET() {

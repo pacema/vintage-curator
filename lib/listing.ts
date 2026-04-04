@@ -15,4 +15,6 @@ export type Listing = {
   staffPick: boolean;
   staffPickName: string | null;
   staffPickNote: string | null;
+  collectionHeadline: string | null;
+  collectionTagline: string | null;
 };
