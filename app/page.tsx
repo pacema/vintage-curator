@@ -116,15 +116,17 @@ export default async function Home() {
           ) : null}
         </div>
 
-        <div className="relative aspect-[1920/1080] w-full overflow-hidden bg-stone-950">
-          <iframe
-            src="https://share.synthesia.io/embeds/videos/26ca9528-34ac-4c9f-a70c-a4d0e47ee228"
-            loading="lazy"
-            title="Synthesia video player - Unlocking Vintage Fashion: Find Unique Pieces Without Breaking the Bank"
-            allowFullScreen
-            allow="encrypted-media; fullscreen; microphone; screen-wake-lock;"
-            className="absolute inset-0 m-0 size-full border-0 p-0"
-          />
+        <div className="mx-auto w-full max-w-7xl px-5 md:px-10">
+          <div className="relative aspect-[1920/1080] w-full overflow-hidden rounded-sm bg-stone-950">
+            <iframe
+              src="https://share.synthesia.io/embeds/videos/26ca9528-34ac-4c9f-a70c-a4d0e47ee228"
+              loading="lazy"
+              title="Synthesia video player - Unlocking Vintage Fashion: Find Unique Pieces Without Breaking the Bank"
+              allowFullScreen
+              allow="encrypted-media; fullscreen; microphone; screen-wake-lock;"
+              className="absolute inset-0 m-0 size-full border-0 p-0"
+            />
+          </div>
         </div>
 
         <div className="mx-auto w-full max-w-7xl px-5 py-12 md:px-10 md:py-16">
