@@ -1,7 +1,31 @@
-export function Logo({ className }: { className?: string }) {
+import fs from "node:fs";
+import path from "node:path";
+
+const LOGO_CANDIDATES = [
+  "vclogo.svg",
+  "logo.svg",
+  "logo.png",
+  "logo.webp",
+  "vintage-curator-logo.svg",
+  "vintage-curator-logo.png",
+] as const;
+
+function resolvePublicLogoSrc(): string | null {
+  const dir = path.join(process.cwd(), "public");
+  for (const name of LOGO_CANDIDATES) {
+    try {
+      if (fs.existsSync(path.join(dir, name))) return `/${name}`;
+    } catch {
+      return null;
+    }
+  }
+  return null;
+}
+
+function FallbackMark() {
   return (
     <svg
-      className={className}
+      className="h-9 w-9 shrink-0 md:h-10 md:w-10"
       viewBox="0 0 40 40"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -21,4 +45,23 @@ export function Logo({ className }: { className?: string }) {
       />
     </svg>
   );
+}
+
+export function Logo() {
+  const src = resolvePublicLogoSrc();
+
+  if (src) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element -- local public asset, dynamic path
+      <img
+        src={src}
+        alt=""
+        width={200}
+        height={48}
+        className="h-9 w-auto max-w-[min(100%,12rem)] shrink-0 object-contain object-left md:h-10"
+      />
+    );
+  }
+
+  return <FallbackMark />;
 }
