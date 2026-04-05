@@ -82,7 +82,7 @@ export default async function Home() {
   const { listings, error } = await getListings();
 
   return (
-    <div className="min-h-full flex flex-col bg-[#2a7267] text-white">
+    <div className="min-h-full flex flex-col bg-[#2a7267] text-[#D8E3E8]">
       <header className="shrink-0 border-b border-stone-200 bg-white px-5 py-5 md:px-10 md:py-6">
         <div className="mx-auto flex max-w-7xl flex-col gap-4 md:flex-row md:items-end md:justify-between md:gap-6">
           <div className="flex items-center gap-3 text-neutral-900 md:gap-4">
@@ -101,7 +101,7 @@ export default async function Home() {
         <div className="mx-auto w-full max-w-7xl px-5 pt-12 md:px-10 md:pt-16">
           {error ? (
             <div
-              className="rounded-sm border border-white/35 bg-white/10 px-5 py-4 font-sans text-sm text-white"
+              className="rounded-sm border border-[#D8E3E8]/35 bg-[#D8E3E8]/10 px-5 py-4 font-sans text-sm text-[#D8E3E8]"
               role="alert"
             >
               {error}
@@ -109,7 +109,7 @@ export default async function Home() {
           ) : null}
 
           {!error && listings.length === 0 ? (
-            <p className="font-sans text-sm text-white">
+            <p className="font-sans text-sm text-[#D8E3E8]">
               No listings yet. Add rows to your Airtable &ldquo;Listings&rdquo;
               table to see them here.
             </p>
@@ -138,12 +138,12 @@ export default async function Home() {
               {headline || tagline ? (
                 <div className="mb-10 max-w-2xl">
                   {headline ? (
-                    <h2 className="mb-3 font-sans text-[2.8125rem] font-medium leading-tight tracking-tight text-white">
+                    <h2 className="mb-3 font-sans text-[2.8125rem] font-medium leading-tight tracking-tight text-[#D8E3E8]">
                       {headline}
                     </h2>
                   ) : null}
                   {tagline ? (
-                    <p className="font-sans text-base leading-relaxed text-white">
+                    <p className="font-sans text-base leading-relaxed text-[#D8E3E8]">
                       {tagline}
                     </p>
                   ) : null}
@@ -161,7 +161,7 @@ export default async function Home() {
                         href={href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group block h-full outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#2a7267]"
+                        className="group block h-full outline-none focus-visible:ring-2 focus-visible:ring-[#D8E3E8]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#2a7267]"
                       >
                         <article className="flex h-full flex-col overflow-hidden rounded-sm border border-stone-200/90 bg-[#faf8f4] shadow-[0_1px_0_rgba(28,25,23,0.06)] transition-[box-shadow,transform] duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_12px_40px_-20px_rgba(28,25,23,0.25)]">
                           <div className="relative aspect-[3/4] w-full overflow-hidden bg-stone-200">
