@@ -82,7 +82,7 @@ export default async function Home() {
   const { listings, error } = await getListings();
 
   return (
-    <div className="min-h-full flex flex-col bg-[#2a7267] text-stone-100">
+    <div className="min-h-full flex flex-col bg-[#2a7267] text-white">
       <header className="shrink-0 border-b border-stone-200 bg-white px-5 py-5 md:px-10 md:py-6">
         <div className="mx-auto flex max-w-7xl flex-col gap-4 md:flex-row md:items-end md:justify-between md:gap-6">
           <div className="flex items-center gap-3 text-neutral-900 md:gap-4">
@@ -101,7 +101,7 @@ export default async function Home() {
         <div className="mx-auto w-full max-w-7xl px-5 pt-12 md:px-10 md:pt-16">
           {error ? (
             <div
-              className="rounded-sm border border-amber-200/80 bg-amber-50/90 px-5 py-4 font-sans text-sm text-amber-950"
+              className="rounded-sm border border-white/35 bg-white/10 px-5 py-4 font-sans text-sm text-white"
               role="alert"
             >
               {error}
@@ -109,7 +109,7 @@ export default async function Home() {
           ) : null}
 
           {!error && listings.length === 0 ? (
-            <p className="font-sans text-sm text-stone-200">
+            <p className="font-sans text-sm text-white">
               No listings yet. Add rows to your Airtable &ldquo;Listings&rdquo;
               table to see them here.
             </p>
@@ -138,12 +138,12 @@ export default async function Home() {
               {headline || tagline ? (
                 <div className="mb-10 max-w-2xl">
                   {headline ? (
-                    <h2 className="mb-3 font-sans text-[2.8125rem] font-medium leading-tight tracking-tight text-stone-900">
+                    <h2 className="mb-3 font-sans text-[2.8125rem] font-medium leading-tight tracking-tight text-white">
                       {headline}
                     </h2>
                   ) : null}
                   {tagline ? (
-                    <p className="font-sans text-base leading-relaxed text-stone-500">
+                    <p className="font-sans text-base leading-relaxed text-white">
                       {tagline}
                     </p>
                   ) : null}
