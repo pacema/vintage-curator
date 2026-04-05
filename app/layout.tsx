@@ -22,7 +22,7 @@ const editorial = Cormorant_Garamond({
 export const metadata: Metadata = {
   title: "VintageCurator",
   description:
-    "AI-curated vintage, sourced from the best. Editorial picks from around the web.",
+    "Irresistible vintage fashion curated by expert vintage stylists.",
 };
 
 export default function RootLayout({

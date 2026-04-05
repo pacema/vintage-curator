@@ -82,17 +82,17 @@ export default async function Home() {
   const { listings, error } = await getListings();
 
   return (
-    <div className="min-h-full flex flex-col bg-[#f3f0e8] text-stone-900">
-      <header className="shrink-0 border-b border-stone-800 bg-[#141312] px-5 py-5 md:px-10 md:py-6">
+    <div className="min-h-full flex flex-col bg-[#2a7267] text-stone-100">
+      <header className="shrink-0 border-b border-stone-200 bg-white px-5 py-5 md:px-10 md:py-6">
         <div className="mx-auto flex max-w-7xl flex-col gap-4 md:flex-row md:items-end md:justify-between md:gap-6">
-          <div className="flex items-center gap-3 text-stone-100 md:gap-4">
+          <div className="flex items-center gap-3 text-neutral-900 md:gap-4">
             <Logo />
-            <h1 className="font-sans text-lg font-medium tracking-[0.2em] text-stone-100 uppercase">
+            <h1 className="font-sans text-lg font-medium tracking-[0.2em] uppercase">
               VintageCurator
             </h1>
           </div>
-          <p className="max-w-md font-sans text-sm leading-relaxed text-stone-500 md:text-right">
-            AI-curated vintage, sourced from the best
+          <p className="max-w-md font-sans text-sm leading-relaxed text-neutral-900 md:text-right">
+            Irresistible vintage fashion curated by expert vintage stylists
           </p>
         </div>
       </header>
@@ -109,7 +109,7 @@ export default async function Home() {
           ) : null}
 
           {!error && listings.length === 0 ? (
-            <p className="font-sans text-sm text-stone-500">
+            <p className="font-sans text-sm text-stone-200">
               No listings yet. Add rows to your Airtable &ldquo;Listings&rdquo;
               table to see them here.
             </p>
@@ -161,7 +161,7 @@ export default async function Home() {
                         href={href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group block h-full outline-none focus-visible:ring-2 focus-visible:ring-stone-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f3f0e8]"
+                        className="group block h-full outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#2a7267]"
                       >
                         <article className="flex h-full flex-col overflow-hidden rounded-sm border border-stone-200/90 bg-[#faf8f4] shadow-[0_1px_0_rgba(28,25,23,0.06)] transition-[box-shadow,transform] duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_12px_40px_-20px_rgba(28,25,23,0.25)]">
                           <div className="relative aspect-[3/4] w-full overflow-hidden bg-stone-200">
