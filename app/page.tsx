@@ -103,13 +103,6 @@ export default async function Home() {
               {error}
             </div>
           ) : null}
-
-          {!error && listings.length === 0 ? (
-            <p className="font-sans text-sm text-[#D8E3E8]">
-              No listings yet. Add rows to your Airtable &ldquo;Listings&rdquo;
-              table to see them here.
-            </p>
-          ) : null}
         </div>
 
         <div className="mx-auto w-full max-w-7xl px-5 md:px-10">
