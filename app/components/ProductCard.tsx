@@ -16,9 +16,17 @@ type ProductCardProps = {
   content: ProductCardContent;
   interactive: boolean;
   href?: string;
+  /** Teal frame matches Murat editorial cards on site background. */
+  frame?: "default" | "teal";
 };
 
-export function ProductCard({ id, content, interactive, href }: ProductCardProps) {
+export function ProductCard({
+  id,
+  content,
+  interactive,
+  href,
+  frame = "default",
+}: ProductCardProps) {
   const {
     imageUrl,
     title,
@@ -35,8 +43,15 @@ export function ProductCard({ id, content, interactive, href }: ProductCardProps
   const shellClass =
     "group block h-full outline-none focus-visible:ring-2 focus-visible:ring-[#D8E3E8]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#2a7267]";
 
+  const frameClass =
+    frame === "teal"
+      ? "border border-[#2a7267]"
+      : "border border-stone-200/90";
+
   const article = (
-    <article className="flex h-full flex-col overflow-hidden rounded-sm border border-stone-200/90 bg-[#faf8f4] shadow-[0_1px_0_rgba(28,25,23,0.06)] transition-[box-shadow,transform] duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_12px_40px_-20px_rgba(28,25,23,0.25)]">
+    <article
+      className={`flex h-full flex-col overflow-hidden rounded-sm bg-[#faf8f4] shadow-[0_1px_0_rgba(28,25,23,0.06)] transition-[box-shadow,transform] duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_12px_40px_-20px_rgba(28,25,23,0.25)] ${frameClass}`}
+    >
       <div className="relative aspect-[3/4] w-full overflow-hidden bg-stone-200">
         {staffPick ? (
           <div className="absolute top-3 left-3 z-10 flex flex-col gap-1">

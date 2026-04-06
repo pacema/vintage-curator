@@ -53,6 +53,7 @@ export default function MuratAckmanPage() {
                       id={id}
                       content={content}
                       interactive={false}
+                      frame="teal"
                     />
                   </li>
                 ))}
