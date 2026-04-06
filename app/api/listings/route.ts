@@ -46,11 +46,50 @@ function toBool(v: unknown): boolean {
   return false;
 }
 
+/** Checkbox, yes/no text, or numeric flags from Airtable */
+function toBoolLoose(v: unknown): boolean {
+  if (typeof v === "boolean") return v;
+  if (typeof v === "number") return v !== 0;
+  if (typeof v === "string") {
+    const t = v.trim().toLowerCase();
+    return t === "yes" || t === "true" || t === "1";
+  }
+  return false;
+}
+
+/** Airtable uses your exact field names — try snake_case and common label variants */
+function firstStr(
+  fields: Record<string, unknown>,
+  keys: string[],
+): string | null {
+  for (const k of keys) {
+    const v = toStr(fields[k]);
+    if (v) return v;
+  }
+  return null;
+}
+
 function mapRecord(record: {
   id: string;
   fields: Record<string, unknown>;
 }): Listing {
   const f = record.fields;
+  const staffPickName = firstStr(f, [
+    "staff_pick_name",
+    "Staff pick name",
+    "Staff Pick Name",
+  ]);
+  const staffPickNote = firstStr(f, [
+    "staff_pick_note",
+    "Staff pick note",
+    "Staff Pick Note",
+  ]);
+  const staffPick =
+    toBoolLoose(f.staff_pick) ||
+    toBoolLoose(f["Staff pick"]) ||
+    toBoolLoose(f["Staff Pick"]) ||
+    !!(staffPickName || staffPickNote);
+
   return {
     id: record.id,
     title: toStr(f.title),
@@ -69,9 +108,9 @@ function mapRecord(record: {
     aiCuratorNote: toStr(f.ai_curator_note),
     aiStyleTags: toStringArray(f.ai_style_tags),
     featured: toBool(f.featured),
-    staffPick: toBool(f.staff_pick),
-    staffPickName: toStr(f.staff_pick_name),
-    staffPickNote: toStr(f.staff_pick_note),
+    staffPick,
+    staffPickName,
+    staffPickNote,
     collectionHeadline: toStr(f.collection_headline),
     collectionTagline: toStr(f.collection_tagline),
   };

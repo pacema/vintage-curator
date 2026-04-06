@@ -53,7 +53,7 @@ export function ProductCard({
       className={`flex h-full flex-col overflow-hidden rounded-sm bg-[#faf8f4] shadow-[0_1px_0_rgba(28,25,23,0.06)] transition-[box-shadow,transform] duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_12px_40px_-20px_rgba(28,25,23,0.25)] ${frameClass}`}
     >
       <div className="relative aspect-[3/4] w-full overflow-hidden bg-stone-200">
-        {staffPick ? (
+        {staffPick || staffPickName || staffPickNote ? (
           <div className="absolute top-3 left-3 z-10 flex flex-col gap-1">
             <span className="bg-stone-900 px-2 py-1 font-sans text-[10px] font-medium tracking-[0.14em] text-stone-100 uppercase">
               ★ {`${staffPickName ?? "Staff"}'s Pick`}
