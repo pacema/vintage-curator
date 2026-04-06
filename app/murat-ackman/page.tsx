@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function MuratAckmanPage() {
   return (
-    <div className="min-h-full flex flex-col bg-[#2a7267] text-[#D8E3E8]">
+    <div className="min-h-full flex flex-col bg-[#21524a] text-[#D8E3E8]">
       <SiteHeader active="murat" />
 
       <main className="flex w-full flex-1 flex-col">

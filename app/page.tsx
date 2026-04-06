@@ -90,7 +90,7 @@ export default async function Home() {
   const { listings, error } = await getListings();
 
   return (
-    <div className="min-h-full flex flex-col bg-[#2a7267] text-[#D8E3E8]">
+    <div className="min-h-full flex flex-col bg-[#21524a] text-[#D8E3E8]">
       <SiteHeader active="shea" />
 
       <main className="flex w-full flex-1 flex-col">

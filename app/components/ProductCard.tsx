@@ -41,11 +41,11 @@ export function ProductCard({
   } = content;
 
   const shellClass =
-    "group block h-full outline-none focus-visible:ring-2 focus-visible:ring-[#D8E3E8]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#2a7267]";
+    "group block h-full outline-none focus-visible:ring-2 focus-visible:ring-[#D8E3E8]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#21524a]";
 
   const frameClass =
     frame === "teal"
-      ? "border border-[#2a7267]"
+      ? "border border-[#21524a]"
       : "border border-stone-200/90";
 
   const article = (
