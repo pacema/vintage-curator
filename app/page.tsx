@@ -24,34 +24,54 @@ function formatPrice(price: Listing["price"]): string {
   return price;
 }
 
-function groupListingsByCategory(listings: Listing[]): {
-  category: string;
+/**
+ * A collection begins at the first row that has a collection headline or tagline;
+ * it runs until the next such row or end of list. Order matches the listings array
+ * (Airtable / view order from the API).
+ */
+function groupListingsByCollection(listings: Listing[]): {
+  headline: string | null;
+  tagline: string | null;
   items: Listing[];
 }[] {
-  const map = new Map<string, Listing[]>();
+  const groups: {
+    headline: string | null;
+    tagline: string | null;
+    items: Listing[];
+  }[] = [];
+
+  let current: Listing[] = [];
+  let headline: string | null = null;
+  let tagline: string | null = null;
+
+  const flush = () => {
+    if (current.length === 0) return;
+    groups.push({
+      headline,
+      tagline,
+      items: current,
+    });
+    current = [];
+    headline = null;
+    tagline = null;
+  };
 
   for (const listing of listings) {
-    const key = listing.category ?? "Other";
-    if (!map.has(key)) map.set(key, []);
-    map.get(key)!.push(listing);
+    const startsCollection =
+      !!listing.collectionHeadline || !!listing.collectionTagline;
+
+    if (startsCollection) {
+      flush();
+      current = [listing];
+      headline = listing.collectionHeadline;
+      tagline = listing.collectionTagline;
+    } else {
+      current.push(listing);
+    }
   }
+  flush();
 
-  const categories = [...map.keys()].sort((a, b) =>
-    a.localeCompare(b, undefined, { sensitivity: "base" }),
-  );
-
-  return categories.map((category) => ({
-    category,
-    items: map.get(category)!,
-  }));
-}
-
-function collectionHeaderForGroup(items: Listing[]) {
-  const headline =
-    items.find((l) => l.collectionHeadline)?.collectionHeadline ?? null;
-  const tagline =
-    items.find((l) => l.collectionTagline)?.collectionTagline ?? null;
-  return { headline, tagline };
+  return groups;
 }
 
 async function getListings(): Promise<{
@@ -119,11 +139,12 @@ export default async function Home() {
         </div>
 
         <div className="mx-auto w-full max-w-7xl px-5 py-12 md:px-10 md:py-16">
-          {groupListingsByCategory(listings).map(({ category, items }) => {
-            const { headline, tagline } = collectionHeaderForGroup(items);
-
+          {groupListingsByCollection(listings).map(({ headline, tagline, items }, idx) => {
             return (
-              <section key={category} className="mb-16 last:mb-0">
+              <section
+                key={items[0]?.id ?? `collection-${idx}`}
+                className="mb-16 last:mb-0"
+              >
                 {headline || tagline ? (
                   <div className="mb-10 max-w-2xl">
                     {headline ? (

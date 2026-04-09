@@ -111,13 +111,22 @@ function mapRecord(record: {
     staffPick,
     staffPickName,
     staffPickNote,
-    collectionHeadline: toStr(f.collection_headline),
-    collectionTagline: toStr(f.collection_tagline),
+    collectionHeadline: firstStr(f, [
+      "collection_headline",
+      "Collection headline",
+      "Collection Headline",
+    ]),
+    collectionTagline: firstStr(f, [
+      "collection_tagline",
+      "Collection tagline",
+      "Collection Tagline",
+    ]),
   };
 }
 export async function GET() {
   const apiKey = process.env.AIRTABLE_API_KEY;
   const baseId = process.env.AIRTABLE_BASE_ID;
+  const listingsView = process.env.AIRTABLE_LISTINGS_VIEW;
 
   console.log(
     "[listings] env:",
@@ -137,6 +146,9 @@ export async function GET() {
   const url = new URL(
     `https://api.airtable.com/v0/${encodeURIComponent(baseId)}/${encodeURIComponent(LISTINGS_TABLE)}`,
   );
+  if (listingsView) {
+    url.searchParams.set("view", listingsView);
+  }
 
   try {
     const res = await fetch(url, {
@@ -161,10 +173,8 @@ export async function GET() {
     };
 
     const raw = data.records ?? [];
-    const listings = raw.map(mapRecord).sort((a, b) => {
-      if (a.featured === b.featured) return 0;
-      return a.featured ? -1 : 1;
-    });
+    /** Preserve Airtable / view order for collection segmentation (no client reorder). */
+    const listings = raw.map(mapRecord);
 
     return NextResponse.json({ listings });
   } catch (e) {
