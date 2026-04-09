@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import type { Listing } from "@/lib/listing";
 
+export const dynamic = "force-dynamic";
+
 const LISTINGS_TABLE = "Listings";
 
 function toStr(v: unknown): string | null {
@@ -151,28 +153,39 @@ export async function GET() {
   }
 
   try {
-    const res = await fetch(url, {
-      headers: { Authorization: `Bearer ${apiKey}` },
-      next: { revalidate: 120 },
-    });
+    const raw: { id: string; fields: Record<string, unknown> }[] = [];
+    let offset: string | undefined;
 
-    if (!res.ok) {
-      const detail = await res.text();
-      return NextResponse.json(
-        {
-          error: "Airtable request failed.",
-          status: res.status,
-          detail: detail.slice(0, 500),
-        },
-        { status: 502 },
-      );
-    }
+    do {
+      const pageUrl = new URL(url.toString());
+      if (offset) pageUrl.searchParams.set("offset", offset);
 
-    const data = (await res.json()) as {
-      records?: { id: string; fields: Record<string, unknown> }[];
-    };
+      const res = await fetch(pageUrl.toString(), {
+        headers: { Authorization: `Bearer ${apiKey}` },
+        cache: "no-store",
+      });
 
-    const raw = data.records ?? [];
+      if (!res.ok) {
+        const detail = await res.text();
+        return NextResponse.json(
+          {
+            error: "Airtable request failed.",
+            status: res.status,
+            detail: detail.slice(0, 500),
+          },
+          { status: 502 },
+        );
+      }
+
+      const data = (await res.json()) as {
+        records?: { id: string; fields: Record<string, unknown> }[];
+        offset?: string;
+      };
+
+      raw.push(...(data.records ?? []));
+      offset = data.offset;
+    } while (offset);
+
     /** Preserve Airtable / view order for collection segmentation (no client reorder). */
     const listings = raw.map(mapRecord);
 

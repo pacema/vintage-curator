@@ -25,9 +25,9 @@ function formatPrice(price: Listing["price"]): string {
 }
 
 /**
- * A collection begins at the first row that has a collection headline or tagline;
- * it runs until the next such row or end of list. Order matches the listings array
- * (Airtable / view order from the API).
+ * Rows without headline/tagline “lead into” the next anchor row: they belong to that
+ * collection, in Airtable order, with the headline shown above the whole block. Rows
+ * after the last anchor stay in that final collection.
  */
 function groupListingsByCollection(listings: Listing[]): {
   headline: string | null;
@@ -40,36 +40,35 @@ function groupListingsByCollection(listings: Listing[]): {
     items: Listing[];
   }[] = [];
 
-  let current: Listing[] = [];
-  let headline: string | null = null;
-  let tagline: string | null = null;
-
-  const flush = () => {
-    if (current.length === 0) return;
-    groups.push({
-      headline,
-      tagline,
-      items: current,
-    });
-    current = [];
-    headline = null;
-    tagline = null;
-  };
+  let pending: Listing[] = [];
 
   for (const listing of listings) {
-    const startsCollection =
+    const isAnchor =
       !!listing.collectionHeadline || !!listing.collectionTagline;
 
-    if (startsCollection) {
-      flush();
-      current = [listing];
-      headline = listing.collectionHeadline;
-      tagline = listing.collectionTagline;
+    if (isAnchor) {
+      groups.push({
+        headline: listing.collectionHeadline,
+        tagline: listing.collectionTagline,
+        items: [...pending, listing],
+      });
+      pending = [];
     } else {
-      current.push(listing);
+      pending.push(listing);
     }
   }
-  flush();
+
+  if (pending.length > 0) {
+    if (groups.length > 0) {
+      groups[groups.length - 1].items.push(...pending);
+    } else {
+      groups.push({
+        headline: null,
+        tagline: null,
+        items: [...pending],
+      });
+    }
+  }
 
   return groups;
 }
